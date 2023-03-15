@@ -174,7 +174,12 @@ function populateTodoForm(todo) {
     if (!todoForm) return;
 
     //get id
-    todoForm.dataset.id = todo.id;
+    if (!todoForm.dataset.id) {
+        return;
+    } else {
+        todoForm.dataset.id = todo.id;
+    }
+
 
     //get value
     const todoInput = document.getElementById('todoText');
@@ -201,7 +206,7 @@ function renderToDoList(todoList, ulElementId, params) {
 function getTodoList() {
     try {
         return JSON.parse(localStorage.getItem('todo_list'))
-    } catch {
+    } catch(err) {
         return [];
     }
 }
@@ -249,7 +254,7 @@ function handleTodoFormSubmit(event) {
             status: 'pending'
         }
         //save to local storage
-        const todoList = getTodoList();
+        const todoList = getTodoList() || [];
         todoList.push(newTodo);
         localStorage.setItem('todo_list', JSON.stringify(todoList));
 
@@ -374,6 +379,7 @@ function handleFilterChange(filterName, filterValue) {
 
     //add event to SUBMIT ADD
     const todoForm = document.getElementById('todoFormId');
+
     if (todoForm) {
         todoForm.addEventListener('submit', handleTodoFormSubmit)
     }
