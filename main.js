@@ -347,7 +347,10 @@ function handleFilterChange(filterName, filterValue) {
     //update query param
     const url = new URL(window.location);
     url.searchParams.set(filterName, filterValue);
-    history.pushState({}, '', url);
+
+    if (url) {
+        history.pushState({}, '', url);
+    }
 
     const todoElementList = getAllTodoElement();
 
