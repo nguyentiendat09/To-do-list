@@ -11,15 +11,6 @@ function createToDoElement(todo, params) {
     todoElement.dataset.id = todo.id;
     todoElement.dataset.status = todo.status;
 
-    //update li in template
-    const titleElement = todoElement.querySelector('.todo_title');
-    if (titleElement) {
-        titleElement.textContent = todo.title;
-    }
-
-    todoElement.hidden = !isMatch(todoElement, params)
-
-
     //render todo status
     const divElement = todoElement.querySelector('div.todo');
     if (divElement) {
@@ -27,6 +18,12 @@ function createToDoElement(todo, params) {
         divElement.classList.remove('alert-secondary');
         divElement.classList.add(alertClass);
     }
+
+    //update li in template
+    const titleElement = todoElement.querySelector('.todo_title');
+    if (titleElement) titleElement.textContent = todo.title;
+
+    todoElement.hidden = !isMatch(todoElement, params)
 
     // const liElement = document.createElement('li');
     // liElement.textContent = todo.title;
@@ -300,12 +297,12 @@ function isMatchSearch(liElement, searchTerm) {
     const titleElement = liElement.querySelector('p.todo_title');
     if (!titleElement) return false;
 
-    return titleElement.textContent.toLowerCase().includes(searchTerm.toLowerCase());
+    return titleElement.textContent.includes(searchTerm);
 
 }
 
 function isMatchStatus(liELement, filterStatus) {
-    return filterStatus === 'all' || liELement.dataset.status === filterStatus;
+    return filterStatus == 'all' || liELement.dataset.status == filterStatus;
 }
 
 function isMatch(liElement, params) {
@@ -326,7 +323,7 @@ function initFilterStatus(params) {
     if (!filterStatusSelect) return;
 
     if (params.get('status')) {
-        filterStatusSelect.value = params.get('status')
+        filterStatusSelect.value = params.get('status');
     }
 
     //attach event change
@@ -350,7 +347,6 @@ function handleFilterChange(filterName, filterValue) {
     //update query param
     const url = new URL(window.location);
     url.searchParams.set(filterName, filterValue);
-
     history.pushState({}, '', url);
 
     const todoElementList = getAllTodoElement();
@@ -378,8 +374,6 @@ function handleFilterChange(filterName, filterValue) {
     if (todoForm) {
         todoForm.addEventListener('submit', handleTodoFormSubmit)
     }
-
-
     initFilterStatus(params);
     initSearchInput(params);
 })()
